@@ -4,13 +4,13 @@ import { useState } from "react";
 export default function PacientBrowser({DNI, DNIM}) {
   // 🔹 Datos simulados (traerías esto de tu backend con fetch/axios)
   const patients = [
-    { DNI: "123", name: "Juan", LastName: "Pérez", Birthdate: "2001-03-30", Diagnose: "Tiene Hipersensivilidad", Observations:"Se recomienda comidas suaves", AdmissionDate:"2025-06-04", medicines: "No" },
-    { DNI: "456", name: "Ana", LastName: "López", Birthdate: "2002-04-12", Diagnose: "Tiene fotosensibilidad", Observations:"Se recomienda apartarlo de las ventanas", AdmissionDate:"2025-04-02", medicines: "No" },
+    { DNI: "123", Name: "Juan", LastName: "Pérez", Birthdate: "2001-03-30", Diagnose: "Tiene Hipersensivilidad", Observations:"Se recomienda comidas suaves", AdmissionDate:"2025-06-04", medicines: "No" },
+    { DNI: "456", Name: "Ana", LastName: "López", Birthdate: "2002-04-12", Diagnose: "Tiene fotosensibilidad", Observations:"Se recomienda apartarlo de las ventanas", AdmissionDate:"2025-04-02", medicines: "No" },
   ];
 
   const Doctors = [
-    {DNI:"224", name: "Enrique", LastName:"Julio", gmail:"Alguien@gmail.com"},
-    {DNI:"234", name: "Paco", LastName:"Albaricoque", gmail:"PAlbaricoque@gmail.com"}
+    {DNI:"224", Name: "Enrique", LastName:"Julio", gmail:"Alguien@gmail.com"},
+    {DNI:"234", Name: "Paco", LastName:"Albaricoque", gmail:"PAlbaricoque@gmail.com"}
   ]
 
   const [registros, setRegistros] = useState([
@@ -26,6 +26,8 @@ export default function PacientBrowser({DNI, DNIM}) {
 
   const [doc, setDocModal] = useState({});
 
+  const [editObservations, setEditObservations] = useState(false);
+  const [observationsText, setObservationsText] = useState(selectedPatient.Observations || "");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -82,12 +84,42 @@ export default function PacientBrowser({DNI, DNIM}) {
       {/*Observations solo para medicos */}
         {rol === true && (
           <div className="card">
-            <p><strong>Observaciones:</strong>{selectedPatient.Observations}</p>
+            <strong>Observaciones:</strong>
+            {!editObservations ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <button onClick={() => setEditObservations(true)}>✏️</button>
+                <span>{observationsText}</span>
+              </div>
+            ) : (
+              <div>
+                <textarea
+                  value={observationsText}
+                  onChange={(e) => setObservationsText(e.target.value)}
+                  rows="3"
+                  style={{ width: "100%" }}
+                />
+                <button onClick={() => {
+                  // Guardar cambios en el paciente
+                  selectedPatient.Observations = observationsText;
+                  setEditObservations(false);
+
+                  // Aquí puedes enviar los datos al backend
+                  /*
+                  fetch(`/api/patients/${selectedPatient.DNI}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ Observations: observationsText })
+                  });
+                  */
+                }}>💾 Guardar</button>
+                <button onClick={() => setEditObservations(false)}>Cancelar</button>
+              </div>
+            )}
           </div>
         )}
         <div className="card">
           <p><strong>DNI:</strong> {selectedPatient.DNI}</p>
-          <p><strong>Nombre:</strong> {selectedPatient.name} {selectedPatient.LastName}</p>
+          <p><strong>Nombre:</strong> {selectedPatient.Name} {selectedPatient.LastName}</p>
           <p><strong>Fecha de nacimiento:</strong> {selectedPatient.Birthdate}</p>
           <p><strong>Diagnostico:</strong>{selectedPatient.Diagnose}</p>
           <p><strong>Medicamentos:</strong> {selectedPatient.medicines}</p>
@@ -132,7 +164,7 @@ export default function PacientBrowser({DNI, DNIM}) {
         <div className="modal">
           <div className="modal-content">
             <h3>Detalle del registro</h3>
-            <p><strong>Cuidador</strong> {doc.name} {doc.LastName}</p>
+            <p><strong>Cuidador</strong> {doc.Name} {doc.LastName}</p>
             <p><strong>Hora:</strong> {selectedRecord.horaInicio} - {selectedRecord.horaFin}</p>
             <p><strong>Descripción:</strong> {selectedRecord.descripcion}</p>
             <button onClick={() => setSelectedRecord(null)}>Cerrar</button>
