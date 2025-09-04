@@ -13,7 +13,8 @@ export default function TablaNiños({ ninos }) {
         <tr>
           <th>Nombre completo</th>
           <th>DNI</th>
-          <th>Fecha de ingreso</th>
+          <th>Fecha de Ingreso</th>
+          <th>Fecha de Nacimiento</th>
           <th>Acción</th>
         </tr>
       </thead>
@@ -24,6 +25,7 @@ export default function TablaNiños({ ninos }) {
               <td>{n.name} {n.lastName}</td>
               <td>{n.dni}</td>
               <td>{new Date(n.admissionDate).toLocaleDateString()}</td>
+              <td>{new Date(n.birthDate).toLocaleDateString()}</td>
               <td>
                 <button onClick={() => irADetalle(n.dni)} className="btn-detalle">
                   Ver detalle

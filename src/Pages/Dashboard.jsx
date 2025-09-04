@@ -7,9 +7,15 @@ export default function Dashboard() {
 
       const [ninos, setNinos] = useState([]);
 
+          const [filtro, setFiltro] = useState({
+        nombre: "",
+        fecha: "",
+        fechaNacimiento: ""
+    });
+
   useEffect(() => {
     let baseUrl = 'https://localhost:7009/api/Kid';
-    let query = `name=${filtro.nombre}&birthDate=${filtro.fecha}&admissionDate=${filtro.fechaAdmision}`;
+    let query = `&name=${filtro.nombre}&admissionDate=${filtro.fecha}&birthDate=${filtro.fechaNacimiento}`;
     let urlWithQuery = `${baseUrl}?${query}`;
     fetch(urlWithQuery)
       .then((res) => res.json())
@@ -19,19 +25,14 @@ export default function Dashboard() {
 
       })
       .catch((err) => console.error("Error al obtener niños:", err));
-  }, []);
+  }, [filtro]);
     
 
 
-    const [filtro, setFiltro] = useState({
-        nombre: "",
-        fecha: "",
-        colaborador: "",
-        estado: ""
-    });
+
 
     // Filtrar datos
-    const ninosFiltrados = ninos.filter((n) => {
+  /* const ninosFiltrados = ninos.filter((n) => {
         return (
             (filtro.nombre === "" || n.nombre.toLowerCase().includes(filtro.nombre.toLowerCase())) &&
             (filtro.fecha === "" || n.fechaIngreso === filtro.fecha) &&
@@ -39,7 +40,7 @@ export default function Dashboard() {
             (filtro.estado === "" || n.estado === filtro.estado)
         );
     });
-
+*/
     return (
         <div className="dashboard-container">
             <div className="info-dashboard">

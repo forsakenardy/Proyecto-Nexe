@@ -3,8 +3,7 @@ export default function Filtros({ filtro, setFiltro }) {
     setFiltro({
       nombre: "",
       fecha: "",
-      colaborador: "",
-      estado: ""
+      fechaAdmision: ""
     });
   };
 
@@ -35,18 +34,15 @@ export default function Filtros({ filtro, setFiltro }) {
         </label>
       </div>
 
-      {/* Filtro por estado */}
+      {/* Filtro por fecha de  */}
       <div className="filtro-item">
         <label>
-          Estado:
-          <select
-            value={filtro.estado}
-            onChange={(e) => setFiltro({ ...filtro, estado: e.target.value })}
-          >
-            <option value="">Todos</option>
-            <option value="Activo">Activo</option>
-            <option value="Inactivo">Inactivo</option>
-          </select>
+          Fecha de Nacimiento:
+          <input
+            type="date"
+            value={filtro.fechaNacimiento}
+            onChange={(e) => setFiltro({ ...filtro, fecha: e.target.value })}
+          />
         </label>
       </div>
 
