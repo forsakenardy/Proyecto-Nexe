@@ -8,7 +8,10 @@ export default function Dashboard() {
       const [ninos, setNinos] = useState([]);
 
   useEffect(() => {
-    fetch("https://localhost:7009/api/Kid")
+    let baseUrl = 'https://localhost:7009/api/Kid';
+    let query = `name=${filtro.nombre}&birthDate=${filtro.fecha}&admissionDate=${filtro.fechaAdmision}`;
+    let urlWithQuery = `${baseUrl}?${query}`;
+    fetch(urlWithQuery)
       .then((res) => res.json())
       .then((data) => {
               console.log("Datos recibidos:", data);
